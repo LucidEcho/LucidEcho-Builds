@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,7 +17,7 @@ jobs:
           node-version: '16.x'
 
       - name: Install GB Studio CLI
-  run: npm install -g gbstudio-cli
+        run: npm install -g @gbstudio/cli@3
 
       - name: Build GBA ROM
         run: |
@@ -28,7 +29,8 @@ jobs:
       - name: Zip ROM
         run: |
           mkdir -p release
-          zip -j release/Elun_Demo_v1.0.zip demos/Elun_Demo_v1.0.gba
+          zip -j release/Elun_Demo_v1.0.zip \
+            demos/Elun_Demo_v1.0.gba
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -36,9 +38,9 @@ jobs:
           tag_name: v1.0-demo
           name: Elun Demo v1.0
           body: |
-            **Elun Demo v1.0**  
-            – Built via CI  
-            – Passwords: RUNE9, RUPDOG, GMONEY, GOOSE / GDEVEL  
+            **Elun Demo v1.0**
+            - Built via CI
+            - Passwords: RUNE9, RUPDOG, GMONEY, GOOSE / GDEVEL
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
