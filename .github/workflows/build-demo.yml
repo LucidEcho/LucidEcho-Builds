@@ -17,20 +17,19 @@ jobs:
           node-version: '16.x'
 
       - name: Install GB Studio CLI
-        run: npm install -g @gbstudio/cli@3
+        run: npm install -g @gbstudio/cli
 
       - name: Build GBA ROM
         run: |
           mkdir -p demos
-          gbstudio-cli build project.json \
+          npx gbstudio-cli build project.json \
             --target gba \
             --out demos/Elun_Demo_v1.0.gba
 
       - name: Zip ROM
         run: |
           mkdir -p release
-          zip -j release/Elun_Demo_v1.0.zip \
-            demos/Elun_Demo_v1.0.gba
+          zip -j release/Elun_Demo_v1.0.zip demos/Elun_Demo_v1.0.gba
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
