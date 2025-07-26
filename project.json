@@ -1,7 +1,0 @@
-{
-  "projectName": "Elun Demo",
-  "version": "1.0.0",
-  "startScene": "00-Title",
-  "orientation": "landscape",
-  "scenes": ["00-Title"]
-}
