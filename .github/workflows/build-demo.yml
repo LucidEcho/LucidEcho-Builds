@@ -16,7 +16,7 @@ jobs:
           node-version: '16.x'
 
       - name: Install GB Studio CLI
-        run: npm install -g @gbstudio/cli@3
+  run: npm install -g gbstudio-cli
 
       - name: Build GBA ROM
         run: |
