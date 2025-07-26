@@ -1,0 +1,45 @@
+name: Build Elun Demo GBA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up GB Studio CLI
+      uses: robertreble/setup-gbstudio@v1
+      with:
+        version: '3.x'
+
+    - name: Build GBA ROM
+      run: |
+        gbstudio-cli build project.json --target gba --out demos/Elun_Demo_v1.0.gba
+
+    - name: Zip ROM
+      run: |
+        mkdir -p release
+        zip -j release/Elun_Demo_v1.0.zip demos/Elun_Demo_v1.0.gba
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.0-demo
+        name: Elun Demo v1.0
+        body: |
+          **Elun Demo v1.0**
+          - Passwords: RUNE9, RUPDOG, GMONEY, GOOSE / GDEVEL for dev
+          - Ready for My Boy! emulator
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      with:
+        artifacts: release/Elun_Demo_v1.0.zip
+        tag_name: v1.0-demo
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
