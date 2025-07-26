@@ -31,10 +31,19 @@ jobs:
         }
         EOF
 
-    - name: Set up GB Studio CLI
-      uses: robertreble/setup-gb-studio@v1
-      with:
-        version: '3.x'
+- name: Set up Node.js
+  uses: actions/setup-node@v3
+  with:
+    node-version: '16.x'
+
+- name: Install GB Studio CLI
+  run: npm install -g @gbstudio/cli@3
+
+- name: Build GBA ROM
+  run: |
+    gbstudio-cli build project.json \
+      --target gba \
+      --out demos/Elun_Demo_v1.0.gba
 
     - name: Build GBA ROM
       run: |
