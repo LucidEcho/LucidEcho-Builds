@@ -1,3 +1,12 @@
+- name: Remove stale .gba from root
+  run: |
+    git config user.name "github-actions[bot]"
+    git config user.email "github-actions[bot]@users.noreply.github.com"
+    git rm Elun_Demo_v1.0.gba || true
+    git commit -m "ci: remove built .gba from root" --allow-empty
+    git push
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 name: Build Elun Demo GBA
 
 on:
