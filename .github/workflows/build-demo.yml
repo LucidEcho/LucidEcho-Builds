@@ -17,11 +17,6 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-
       - name: Install GB Studio CLI
         run: npm install -g @gbstudio/cli@3
 
