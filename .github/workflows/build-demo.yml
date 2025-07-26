@@ -32,7 +32,7 @@ jobs:
         EOF
 
     - name: Set up GB Studio CLI
-      uses: robertreble/setup-gbstudio@v1
+      uses: robertreble/setup-gb-studio@v1
       with:
         version: '3.x'
 
