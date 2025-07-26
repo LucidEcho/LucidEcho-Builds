@@ -7,68 +7,44 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # ── Scaffold placeholder project ───────────────────────
-    - name: Scaffold project files
-      run: |
-        mkdir -p scenes sprites backgrounds audio/music audio/sfx fonts demos
-        cat << 'EOF' > project.json
-        {
-          "projectName": "Elun Demo",
-          "version": "1.0.0",
-          "startScene": "00-Title",
-          "orientation": "landscape",
-          "scenes": ["00-Title"]
-        }
-        EOF
-        cat << 'EOF' > scenes/00-Title.json
-        {
-          "name": "00-Title",
-          "background": null,
-          "script": [],
-          "entities": []
-        }
-        EOF
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
 
-- name: Set up Node.js
-  uses: actions/setup-node@v3
-  with:
-    node-version: '16.x'
+      - name: Install GB Studio CLI
+        run: npm install -g @gbstudio/cli@3
 
-- name: Install GB Studio CLI
-  run: npm install -g @gbstudio/cli@3
+      - name: Build GBA ROM
+        run: |
+          mkdir -p demos
+          gbstudio-cli build project.json \
+            --target gba \
+            --out demos/Elun_Demo_v1.0.gba
 
-- name: Build GBA ROM
-  run: |
-    gbstudio-cli build project.json \
-      --target gba \
-      --out demos/Elun_Demo_v1.0.gba
+      - name: Zip ROM
+        run: |
+          mkdir -p release
+          zip -j release/Elun_Demo_v1.0.zip demos/Elun_Demo_v1.0.gba
 
-    - name: Build GBA ROM
-      run: |
-        gbstudio-cli build project.json --target gba --out demos/Elun_Demo_v1.0.gba
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0-demo
+          name: Elun Demo v1.0
+          body: |
+            **Elun Demo v1.0**  
+            – Built via CI  
+            – Passwords: RUNE9, RUPDOG, GMONEY, GOOSE / GDEVEL  
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Zip ROM
-      run: |
-        mkdir -p release
-        zip -j release/Elun_Demo_v1.0.zip demos/Elun_Demo_v1.0.gba
-
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v1.0-demo
-        name: Elun Demo v1.0
-        body: |
-          **Elun Demo v1.0**  
-          ─ Placeholder build via CI
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v1
-      with:
-        artifacts: release/Elun_Demo_v1.0.zip
-        tag_name: v1.0-demo
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          artifacts: release/Elun_Demo_v1.0.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
